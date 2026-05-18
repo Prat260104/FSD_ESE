@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Play, Plus, X, Settings2 } from 'lucide-react';
+import { Play, Plus, X, Settings2, Building, Target, Zap } from 'lucide-react';
 
 export default function AnalyticsSetup() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [skillInput, setSkillInput] = useState('');
   
   const [criteria, setCriteria] = useState({
@@ -39,7 +38,6 @@ export default function AnalyticsSetup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Navigate to results page with criteria state
     navigate('/analytics/results', { state: { criteria } });
   };
 
@@ -49,89 +47,100 @@ export default function AnalyticsSetup() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-card"
-      style={{ maxWidth: 700, margin: '0 auto', padding: '32px' }}
+      style={{ maxWidth: 750, margin: '0 auto' }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 32 }}>
-        <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(99,102,241,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Settings2 size={24} color="var(--primary-400)" />
+      <div style={{ textAlign: 'center', marginBottom: 40 }}>
+        <div style={{ width: 64, height: 64, borderRadius: 20, background: 'linear-gradient(135deg, var(--primary-500), var(--accent-500))', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 8px 24px rgba(99,102,241,0.3)' }}>
+          <Settings2 size={32} color="#fff" />
         </div>
-        <div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-            Run Performance Analytics
-          </h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Define criteria to evaluate and rank employees</p>
-        </div>
+        <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', marginBottom: 8 }}>
+          Run Performance Analytics
+        </h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: 500, margin: '0 auto' }}>
+          Define the criteria below to evaluate employees and generate AI-driven performance insights.
+        </p>
       </div>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-        <div className="form-group">
-          <label className="form-label">Target Department (Optional)</label>
-          <select
-            name="targetDepartment"
-            className="form-input"
-            value={criteria.targetDepartment}
-            onChange={handleChange}
-          >
-            <option value="">All Departments</option>
-            {departments.map(d => (
-              <option key={d} value={d}>{d}</option>
-            ))}
-          </select>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 4 }}>
-            Leave blank to evaluate the entire organization.
-          </p>
+      <form onSubmit={handleSubmit} className="glass-card" style={{ padding: 40, display: 'flex', flexDirection: 'column', gap: 32 }}>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 24 }}>
+          <div className="form-group">
+            <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Building size={16} color="var(--primary-500)" /> Target Department
+            </label>
+            <select
+              name="targetDepartment"
+              className="form-input"
+              value={criteria.targetDepartment}
+              onChange={handleChange}
+            >
+              <option value="">All Departments</option>
+              {departments.map(d => <option key={d} value={d}>{d}</option>)}
+            </select>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 4 }}>
+              Leave blank to evaluate the entire organization.
+            </p>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Target size={16} color="var(--primary-500)" /> Minimum Score
+            </label>
+            <input
+              type="number"
+              name="minPerformanceScore"
+              className="form-input"
+              value={criteria.minPerformanceScore}
+              onChange={handleChange}
+              min="0"
+              max="100"
+              placeholder="e.g. 70"
+            />
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: 4 }}>
+              Filter employees with raw performance scores above this threshold.
+            </p>
+          </div>
         </div>
 
         <div className="form-group">
-          <label className="form-label">Minimum Performance Score (Optional)</label>
-          <input
-            type="number"
-            name="minPerformanceScore"
-            className="form-input"
-            value={criteria.minPerformanceScore}
-            onChange={handleChange}
-            min="0"
-            max="100"
-            placeholder="e.g. 70"
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Required Skills for Evaluation</label>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+          <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Zap size={16} color="var(--primary-500)" /> Required Skills for Evaluation
+          </label>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
             <input
               type="text"
               className="form-input"
+              style={{ flex: 1 }}
               value={skillInput}
               onChange={(e) => setSkillInput(e.target.value)}
-              placeholder="e.g. Leadership, React, Communication"
+              placeholder="e.g. Leadership, React, Communication..."
               onKeyPress={(e) => e.key === 'Enter' && handleAddSkill(e)}
             />
-            <button type="button" className="btn btn-secondary" onClick={handleAddSkill}>
+            <button type="button" className="btn btn-secondary" onClick={handleAddSkill} style={{ padding: '0 24px' }}>
               <Plus size={18} /> Add
             </button>
           </div>
           
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, minHeight: 40, padding: '12px', background: 'var(--bg-secondary)', borderRadius: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, background: 'var(--bg-secondary)', padding: '20px', borderRadius: '12px', minHeight: '80px', border: '1px dashed var(--border-color)' }}>
             {criteria.requiredSkills.map(skill => (
-              <span key={skill} className="badge badge-primary" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span key={skill} className="badge badge-primary" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px', fontSize: '0.85rem' }}>
                 {skill}
-                <X size={14} style={{ cursor: 'pointer' }} onClick={() => removeSkill(skill)} />
+                <X size={14} style={{ cursor: 'pointer', opacity: 0.7 }} onClick={() => removeSkill(skill)} onMouseOver={(e) => e.target.style.opacity = 1} onMouseOut={(e) => e.target.style.opacity = 0.7} />
               </span>
             ))}
             {criteria.requiredSkills.length === 0 && (
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 'auto' }}>
-                No required skills defined.
-              </span>
+              <div style={{ margin: 'auto', textAlign: 'center', color: 'var(--text-muted)' }}>
+                <p style={{ fontSize: '0.9rem', fontWeight: 500 }}>No required skills defined.</p>
+                <p style={{ fontSize: '0.8rem' }}>The AI will only evaluate based on generic performance metrics.</p>
+              </div>
             )}
           </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>
-          <button type="submit" className="btn btn-primary" style={{ padding: '12px 32px', fontSize: '1rem' }}>
-            <Play size={18} />
-            Run Evaluation
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16 }}>
+          <button type="submit" className="btn btn-primary" style={{ padding: '14px 40px', fontSize: '1.1rem', borderRadius: '12px', width: '100%', maxWidth: 400 }}>
+            <Play size={20} fill="currentColor" />
+            Launch AI Evaluation Engine
           </button>
         </div>
       </form>
