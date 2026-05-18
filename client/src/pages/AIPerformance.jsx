@@ -18,11 +18,11 @@ export default function AIPerformance() {
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   useEffect(() => {
-    if (!criteria) {
-      navigate('/analytics');
-      return;
+    if (criteria) {
+      fetchAIAnalysis();
+    } else {
+      setLoading(false);
     }
-    fetchAIAnalysis();
   }, [criteria]);
 
   const fetchAIAnalysis = async () => {
@@ -87,6 +87,21 @@ export default function AIPerformance() {
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: 450, textAlign: 'center', lineHeight: 1.6 }}>
           OpenRouter AI is currently evaluating employee skills, performance scores, and generating actionable feedback and promotion recommendations.
         </p>
+      </div>
+    );
+  if (!criteria || (!loading && !data)) {
+    return (
+      <div style={{ height: '70vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+        <Brain size={64} color="var(--text-muted)" style={{ opacity: 0.2, marginBottom: 24 }} />
+        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: 12 }}>
+          No AI Analysis Running
+        </h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: 450, marginBottom: 32 }}>
+          You need to define criteria and run an evaluation before the AI can generate performance insights.
+        </p>
+        <button className="btn btn-primary" onClick={() => navigate('/analytics')} style={{ padding: '12px 32px', fontSize: '1.1rem' }}>
+          Go to Analytics Setup
+        </button>
       </div>
     );
   }
@@ -268,4 +283,5 @@ export default function AIPerformance() {
       )}
     </div>
   );
+}
 }

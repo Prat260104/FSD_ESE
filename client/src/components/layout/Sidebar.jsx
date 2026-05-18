@@ -23,7 +23,14 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         borderRight: '1px solid var(--border-color)',
         background: 'var(--bg-card)',
         backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)'
+        WebkitBackdropFilter: 'blur(20px)',
+        width: 260,
+        minWidth: 260,
+        height: '100vh',
+        position: window.innerWidth <= 768 ? 'fixed' : 'sticky',
+        top: 0,
+        overflowY: 'auto',
+        zIndex: 40
       }}>
         <div style={{ padding: '32px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
