@@ -23,8 +23,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['recruiter', 'admin'],
-    default: 'recruiter'
+    enum: ['hr', 'admin'],
+    default: 'hr'
   }
 }, {
   timestamps: true
@@ -38,8 +38,8 @@ userSchema.pre('save', async function(next) {
 });
 
 // Compare password method
-userSchema.methods.comparePassword = async function(candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+userSchema.methods.comparePassword = async function(enteredPassword) {
+  return bcrypt.compare(enteredPassword, this.password);
 };
 
 // Remove password from JSON output

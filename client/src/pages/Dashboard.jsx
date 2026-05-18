@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { dashboardService } from '../services/dataService';
-import { Users, BookmarkCheck, Brain, TrendingUp, UserPlus, FileSearch, ArrowRight } from 'lucide-react';
+import { Users, BookmarkCheck, Brain, TrendingUp, UserPlus, FileSearch, ArrowRight, Building, Award } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const cardVariants = {
@@ -43,10 +43,10 @@ export default function Dashboard() {
   }
 
   const statCards = [
-    { label: 'Total Candidates', value: stats?.stats?.totalCandidates || 0, icon: Users, color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
-    { label: 'Saved Shortlists', value: stats?.stats?.totalShortlists || 0, icon: BookmarkCheck, color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)' },
-    { label: 'Avg Experience', value: `${stats?.stats?.avgExperience || 0} yrs`, icon: TrendingUp, color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
-    { label: 'Unique Skills', value: stats?.stats?.totalSkills || 0, icon: Brain, color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
+    { label: 'Total Employees', value: stats?.stats?.totalEmployees || 0, icon: Users, color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
+    { label: 'Avg Performance', value: `${stats?.stats?.avgPerformance || 0}/100`, icon: Award, color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
+    { label: 'Departments', value: stats?.stats?.totalDepartments || 0, icon: Building, color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
+    { label: 'Saved Evaluations', value: stats?.stats?.totalEvaluations || 0, icon: BookmarkCheck, color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)' },
   ];
 
   return (
@@ -89,21 +89,21 @@ export default function Dashboard() {
       >
         <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 16, color: 'var(--text-primary)' }}>Quick Actions</h3>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <Link to="/candidates/new" className="btn btn-primary" id="quick-add-candidate">
-            <UserPlus size={18} /> Add Candidate
+          <Link to="/employees/new" className="btn btn-primary">
+            <UserPlus size={18} /> Add Employee
           </Link>
-          <Link to="/match" className="btn btn-secondary" id="quick-match">
-            <FileSearch size={18} /> Start Matching
+          <Link to="/analytics" className="btn btn-secondary">
+            <FileSearch size={18} /> Run Analytics
           </Link>
-          <Link to="/candidates" className="btn btn-secondary" id="quick-view-all">
-            <Users size={18} /> View All Candidates
+          <Link to="/employees" className="btn btn-secondary">
+            <Users size={18} /> View All Employees
           </Link>
         </div>
       </motion.div>
 
       {/* Charts Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: 20 }}>
-        {/* Skills Distribution */}
+        {/* Department Distribution */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -111,13 +111,13 @@ export default function Dashboard() {
           className="glass-card"
           style={{ padding: '24px' }}
         >
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 20, color: 'var(--text-primary)' }}>Top Skills</h3>
-          {stats?.skillDistribution?.length > 0 ? (
+          <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 20, color: 'var(--text-primary)' }}>Department Headcount</h3>
+          {stats?.departmentDistribution?.length > 0 ? (
             <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={stats.skillDistribution} layout="vertical" margin={{ left: 20 }}>
+              <BarChart data={stats.departmentDistribution} layout="vertical" margin={{ left: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
                 <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} />
-                <YAxis type="category" dataKey="skill" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} width={90} />
+                <YAxis type="category" dataKey="department" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} width={100} />
                 <Tooltip
                   contentStyle={{
                     background: 'var(--bg-card)',
@@ -132,7 +132,7 @@ export default function Dashboard() {
             </ResponsiveContainer>
           ) : (
             <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>
-              <p>No skill data yet. Add candidates to see distribution.</p>
+              <p>No department data yet.</p>
             </div>
           )}
         </motion.div>
@@ -183,7 +183,7 @@ export default function Dashboard() {
         </motion.div>
       </div>
 
-      {/* Recent Candidates */}
+      {/* Top Performers */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -192,42 +192,35 @@ export default function Dashboard() {
         style={{ padding: '24px' }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>Recent Candidates</h3>
-          <Link to="/candidates" style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--primary-400)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>Top Performers</h3>
+          <Link to="/employees" style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--primary-400)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}>
             View all <ArrowRight size={16} />
           </Link>
         </div>
 
-        {stats?.recentCandidates?.length > 0 ? (
+        {stats?.topPerformers?.length > 0 ? (
           <div className="table-container">
             <table className="table">
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Department</th>
                   <th>Email</th>
-                  <th>Skills</th>
                   <th>Experience</th>
-                  <th>Added</th>
+                  <th>Performance Score</th>
                 </tr>
               </thead>
               <tbody>
-                {stats.recentCandidates.map(c => (
+                {stats.topPerformers.map(c => (
                   <tr key={c._id}>
                     <td style={{ fontWeight: 600 }}>{c.name}</td>
+                    <td><span className="badge badge-info">{c.department}</span></td>
                     <td style={{ color: 'var(--text-secondary)' }}>{c.email}</td>
-                    <td>
-                      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                        {c.skills.slice(0, 3).map(s => (
-                          <span key={s} className="badge badge-skill">{s}</span>
-                        ))}
-                        {c.skills.length > 3 && (
-                          <span className="badge badge-info">+{c.skills.length - 3}</span>
-                        )}
-                      </div>
-                    </td>
                     <td>{c.experience} yrs</td>
-                    <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                      {new Date(c.createdAt).toLocaleDateString()}
+                    <td>
+                      <span className={`badge ${c.performanceScore >= 80 ? 'badge-high' : c.performanceScore >= 60 ? 'badge-medium' : 'badge-low'}`}>
+                        {c.performanceScore}/100
+                      </span>
                     </td>
                   </tr>
                 ))}
@@ -237,9 +230,9 @@ export default function Dashboard() {
         ) : (
           <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>
             <Users size={40} style={{ marginBottom: 12, opacity: 0.3 }} />
-            <p>No candidates yet. Start by adding your first candidate!</p>
-            <Link to="/candidates/new" className="btn btn-primary" style={{ marginTop: 16 }}>
-              <UserPlus size={18} /> Add First Candidate
+            <p>No employees yet. Start by adding your first employee!</p>
+            <Link to="/employees/new" className="btn btn-primary" style={{ marginTop: 16 }}>
+              <UserPlus size={18} /> Add First Employee
             </Link>
           </div>
         )}

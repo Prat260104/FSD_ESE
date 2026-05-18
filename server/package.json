@@ -1,7 +1,7 @@
 {
-  "name": "candidate-shortlisting-server",
+  "name": "employee-analytics-server",
   "version": "1.0.0",
-  "description": "AI-powered candidate profile shortlisting backend",
+  "description": "AI-Based Employee Performance Analytics System Backend",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

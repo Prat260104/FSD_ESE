@@ -63,7 +63,7 @@ export default function Login() {
             Welcome back
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: 4 }}>
-            Sign in to your HireAI account
+            Sign in to your EmpAI account
           </p>
         </div>
 

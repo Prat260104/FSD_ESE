@@ -25,14 +25,14 @@ app.use(express.urlencoded({ extended: true }));
 
 // API Routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/candidates', require('./routes/candidates'));
-app.use('/api/match', require('./routes/match'));
-app.use('/api/shortlists', require('./routes/shortlists'));
+app.use('/api/employees', require('./routes/employees'));
+app.use('/api/ai', require('./routes/ai'));
+app.use('/api/evaluations', require('./routes/evaluations'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 
 // Health Check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Candidate Shortlisting API is running', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', message: 'Employee Analytics API is running', timestamp: new Date().toISOString() });
 });
 
 // Global Error Handler

@@ -1,59 +1,59 @@
 const mongoose = require('mongoose');
 
-const shortlistedCandidateSchema = new mongoose.Schema({
-  candidate: {
+const evaluatedEmployeeSchema = new mongoose.Schema({
+  employee: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Candidate',
+    ref: 'Employee',
     required: true
   },
-  matchScore: {
+  evaluationScore: {
     type: Number,
     required: true,
     min: 0,
     max: 100
   },
-  matchedSkills: {
+  strengths: {
     type: [String],
     default: []
   },
-  missingSkills: {
+  areasForImprovement: {
     type: [String],
     default: []
   },
-  aiExplanation: {
+  aiFeedback: {
     type: String,
     default: ''
   },
   recommendation: {
     type: String,
-    enum: ['High Match', 'Medium Match', 'Low Match', 'Strongly Recommended', 'Recommended', 'Consider', 'Not Recommended'],
-    default: 'Low Match'
+    enum: ['Promote', 'Strongly Recommend Promotion', 'Needs Training', 'Performance Plan', 'Excellent', 'Good', 'Average', 'Poor'],
+    default: 'Average'
   }
 }, { _id: false });
 
-const shortlistSchema = new mongoose.Schema({
+const evaluationSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: [true, 'Shortlist title is required'],
+    required: [true, 'Evaluation title is required'],
     trim: true,
     maxlength: [200, 'Title cannot exceed 200 characters']
   },
-  jobRequirements: {
+  criteria: {
     requiredSkills: {
       type: [String],
       default: []
     },
-    preferredSkills: {
-      type: [String],
-      default: []
+    targetDepartment: {
+      type: String,
+      default: ''
     },
-    minExperience: {
+    minPerformanceScore: {
       type: Number,
       default: 0
     }
   },
-  candidates: [shortlistedCandidateSchema],
-  aiAnalysis: {
+  employees: [evaluatedEmployeeSchema],
+  aiAnalysisSummary: {
     type: String,
     default: ''
   },
@@ -66,6 +66,6 @@ const shortlistSchema = new mongoose.Schema({
   timestamps: true
 });
 
-shortlistSchema.index({ createdBy: 1, createdAt: -1 });
+evaluationSchema.index({ createdBy: 1, createdAt: -1 });
 
-module.exports = mongoose.model('Shortlist', shortlistSchema);
+module.exports = mongoose.model('Evaluation', evaluationSchema);

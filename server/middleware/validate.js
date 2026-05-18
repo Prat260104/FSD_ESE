@@ -12,8 +12,8 @@ const handleValidation = (req, res, next) => {
   next();
 };
 
-// Candidate validation rules
-const validateCandidate = [
+// Employee validation rules
+const validateEmployee = [
   body('name')
     .trim()
     .notEmpty().withMessage('Name is required')
@@ -22,11 +22,15 @@ const validateCandidate = [
     .trim()
     .notEmpty().withMessage('Email is required')
     .isEmail().withMessage('Please enter a valid email'),
-  body('skills')
-    .isArray({ min: 1 }).withMessage('At least one skill is required'),
-  body('skills.*')
+  body('department')
     .trim()
-    .notEmpty().withMessage('Skill cannot be empty'),
+    .notEmpty().withMessage('Department is required'),
+  body('performanceScore')
+    .notEmpty().withMessage('Performance score is required')
+    .isFloat({ min: 0, max: 100 }).withMessage('Performance score must be between 0 and 100'),
+  body('skills')
+    .optional()
+    .isArray().withMessage('Skills must be an array'),
   body('experience')
     .notEmpty().withMessage('Experience is required')
     .isFloat({ min: 0, max: 50 }).withMessage('Experience must be between 0 and 50 years'),
@@ -34,10 +38,6 @@ const validateCandidate = [
     .optional()
     .trim()
     .isLength({ max: 2000 }).withMessage('Bio cannot exceed 2000 characters'),
-  body('projects')
-    .optional()
-    .trim()
-    .isLength({ max: 3000 }).withMessage('Projects cannot exceed 3000 characters'),
   handleValidation
 ];
 
@@ -67,26 +67,24 @@ const validateLogin = [
   handleValidation
 ];
 
-// Match validation rules
-const validateMatch = [
+// Evaluation validation rules
+const validateEvaluation = [
   body('requiredSkills')
-    .isArray({ min: 1 }).withMessage('At least one required skill is needed'),
-  body('requiredSkills.*')
-    .trim()
-    .notEmpty().withMessage('Required skill cannot be empty'),
-  body('preferredSkills')
     .optional()
-    .isArray().withMessage('Preferred skills must be an array'),
-  body('minExperience')
+    .isArray().withMessage('Required skills must be an array'),
+  body('targetDepartment')
     .optional()
-    .isFloat({ min: 0 }).withMessage('Minimum experience must be a positive number'),
+    .trim(),
+  body('minPerformanceScore')
+    .optional()
+    .isFloat({ min: 0, max: 100 }).withMessage('Minimum performance score must be between 0 and 100'),
   handleValidation
 ];
 
 module.exports = {
-  validateCandidate,
+  validateEmployee,
   validateRegister,
   validateLogin,
-  validateMatch,
+  validateEvaluation,
   handleValidation
 };

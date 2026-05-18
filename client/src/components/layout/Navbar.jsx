@@ -1,78 +1,43 @@
 import { useTheme } from '../../context/ThemeContext';
-import { Sun, Moon, Bell } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { Menu, Sun, Moon, Bell, User } from 'lucide-react';
 
-const pageTitles = {
-  '/': 'Dashboard',
-  '/candidates/new': 'Add Candidate',
-  '/candidates': 'Candidates',
-  '/match': 'Job Matching',
-  '/match/results': 'Match Results',
-  '/ai-recommendations': 'AI Recommendations',
-  '/shortlists': 'Saved Shortlists',
-};
-
-export default function Navbar() {
-  const { theme, toggleTheme } = useTheme();
-  const location = useLocation();
-
-  const getTitle = () => {
-    if (location.pathname.startsWith('/candidates/') && location.pathname !== '/candidates/new') {
-      return 'Edit Candidate';
-    }
-    return pageTitles[location.pathname] || 'HireAI';
-  };
+export default function Navbar({ toggleSidebar }) {
+  const { isDarkMode, toggleTheme } = useTheme();
+  const { user } = useAuth();
 
   return (
-    <header style={{
-      height: 64,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 32px',
-      borderBottom: '1px solid var(--border-color)',
-      background: 'var(--bg-glass)',
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 30
-    }}>
-      <h2 style={{
-        fontSize: '1.25rem',
-        fontWeight: 700,
-        color: 'var(--text-primary)',
-        letterSpacing: '-0.01em'
-      }}>
-        {getTitle()}
-      </h2>
+    <header className="navbar">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <button className="btn btn-ghost" onClick={toggleSidebar} style={{ padding: 8 }}>
+          <Menu size={20} />
+        </button>
+        <h2 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', display: 'none' }} className="hide-mobile">
+          Employee Analytics System
+        </h2>
+      </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <button
-          onClick={toggleTheme}
-          className="btn btn-ghost"
-          style={{ padding: 10, borderRadius: '50%' }}
-          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-          id="theme-toggle"
-        >
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <button className="btn btn-ghost" onClick={toggleTheme} style={{ padding: 8 }}>
+          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
         </button>
-        <button
-          className="btn btn-ghost"
-          style={{ padding: 10, borderRadius: '50%', position: 'relative' }}
-          title="Notifications"
-        >
+        <button className="btn btn-ghost" style={{ padding: 8, position: 'relative' }}>
           <Bell size={20} />
-          <span style={{
-            position: 'absolute',
-            top: 6,
-            right: 6,
-            width: 8,
-            height: 8,
-            borderRadius: '50%',
-            background: 'var(--error)',
-          }} />
+          <span style={{ position: 'absolute', top: 6, right: 8, width: 8, height: 8, background: 'var(--error)', borderRadius: '50%' }} />
         </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 8, paddingLeft: 16, borderLeft: '1px solid var(--border-color)' }}>
+          <div style={{ textAlign: 'right', display: 'none' }} className="hide-mobile">
+            <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>{user?.name}</p>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>HR Admin</p>
+          </div>
+          <div style={{
+            width: 36, height: 36, borderRadius: '50%',
+            background: 'var(--bg-secondary)', border: '2px solid var(--border-color)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <User size={18} color="var(--text-secondary)" />
+          </div>
+        </div>
       </div>
     </header>
   );

@@ -71,7 +71,7 @@ export default function Register() {
             Create Account
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: 4 }}>
-            Get started with HireAI
+            Get started with EmpAI
           </p>
         </div>
 
