@@ -89,6 +89,8 @@ export default function AIPerformance() {
         </p>
       </div>
     );
+  }
+
   if (!criteria || (!loading && !data)) {
     return (
       <div style={{ height: '70vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
