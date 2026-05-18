@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { Sparkles, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 export default function Login() {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -21,6 +22,7 @@ export default function Login() {
     try {
       await login(form.email, form.password);
       toast.success('Welcome back!');
+      navigate('/dashboard');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
     } finally {
