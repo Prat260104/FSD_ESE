@@ -24,7 +24,7 @@ exports.evaluateEmployees = async (req, res, next) => {
       strengths: r.matchedSkills, // mapping matched -> strengths
       areasForImprovement: r.missingSkills,
       rank: i + 1,
-      recommendation: r.evaluationScore >= 80 ? 'Excellent' : r.evaluationScore >= 60 ? 'Good' : 'Average'
+      recommendation: r.evaluationScore >= 80 ? 'Promote / High Performer' : r.evaluationScore >= 60 ? 'Provide Training' : 'Needs Immediate Improvement'
     }));
 
     res.status(200).json({
