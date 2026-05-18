@@ -5,38 +5,53 @@ import { useState, useEffect } from 'react';
 
 export default function Layout() {
   const [sidebarWidth, setSidebarWidth] = useState(260);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const sidebar = document.querySelector('aside');
-      if (sidebar) {
+      if (sidebar && window.innerWidth > 768) {
         setSidebarWidth(sidebar.offsetWidth);
+      } else {
+        setSidebarWidth(0); // On mobile, sidebar overlays
       }
     });
 
     const sidebar = document.querySelector('aside');
     if (sidebar) {
       observer.observe(sidebar, { attributes: true, attributeFilter: ['style'] });
-      setSidebarWidth(sidebar.offsetWidth);
+      setSidebarWidth(window.innerWidth > 768 ? sidebar.offsetWidth : 0);
     }
 
-    return () => observer.disconnect();
+    const handleResize = () => {
+      setSidebarWidth(window.innerWidth > 768 && sidebar ? sidebar.offsetWidth : 0);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
       <div className="bg-gradient-blobs" />
-      <Sidebar />
+      
+      <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+      
       <main style={{
         flex: 1,
         marginLeft: sidebarWidth,
         transition: 'margin-left 0.3s ease',
         minHeight: '100vh',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        width: `calc(100% - ${sidebarWidth}px)`
       }}>
-        <Navbar />
-        <div style={{ flex: 1, padding: '28px 32px', maxWidth: 1400, width: '100%', margin: '0 auto' }}>
+        <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+        
+        <div style={{ flex: 1, padding: '32px', width: '100%' }}>
           <Outlet />
         </div>
       </main>

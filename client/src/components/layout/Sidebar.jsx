@@ -25,19 +25,30 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)'
       }}>
-        <div style={{ padding: '32px 24px 24px', display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: 12,
-            background: 'linear-gradient(135deg, var(--primary-500), var(--accent-500))',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontWeight: 'bold', fontSize: '1.4rem',
-            boxShadow: '0 4px 12px rgba(99,102,241,0.3)'
-          }}>
-            E
+        <div style={{ padding: '32px 24px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{
+              width: 40, height: 40, borderRadius: 12,
+              background: 'linear-gradient(135deg, var(--primary-500), var(--accent-500))',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff', fontWeight: 'bold', fontSize: '1.4rem',
+              boxShadow: '0 4px 12px rgba(99,102,241,0.3)'
+            }}>
+              E
+            </div>
+            <span style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>
+              EmpAI
+            </span>
           </div>
-          <span style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>
-            EmpAI
-          </span>
+          
+          {/* Close button for mobile */}
+          <button 
+            className="btn btn-ghost hide-desktop" 
+            onClick={() => setIsOpen(false)}
+            style={{ padding: 4, display: window.innerWidth > 768 ? 'none' : 'block' }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
         </div>
 
         <div style={{ padding: '0 20px', marginBottom: 16 }}>
@@ -49,6 +60,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             <NavLink
               key={link.to}
               to={link.to}
+              end={link.to === '/employees'}
               className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
               style={({ isActive }) => ({
                 display: 'flex', alignItems: 'center', gap: 12,
